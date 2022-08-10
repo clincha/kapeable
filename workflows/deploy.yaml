@@ -1,0 +1,17 @@
+name: Deploy
+jobs:
+  deployment:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v1
+      - name: Dependencies
+        uses: WyriHaximus/github-action-helm3@v2
+        with:
+          exec: helm repo add elastic https://helm.elastic.co
+          kubeconfig: '${{ secrets.KUBECONFIG }}'
+
+      - name: Deploy
+        uses: WyriHaximus/github-action-helm3@v2
+        with:
+          exec: helm install elasticsearch --version 7.17.3 elastic/elasticsearch
+          kubeconfig: '${{ secrets.KUBECONFIG }}'
